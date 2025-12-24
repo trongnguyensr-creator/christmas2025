@@ -8,6 +8,9 @@ let isMusicPlaying = false;
 let lastTime = 0;
 let lyricInterval;
 let currentLyricIndex = 0;
+let isTyping = false;
+let currentTypingText = '';
+let typingSpeed = 50; // tốc độ gõ chữ (ms mỗi ký tự)
 
 // Lấy các phần tử DOM
 const introSection = document.getElementById('intro-section');
@@ -93,7 +96,7 @@ function initSnowMain() {
             case 2: // Far - nhỏ hơn
                 size = Math.random() * 1 + 0.5;
                 speed = Math.random() * 0.6 + 0.3;
-                opacity: Math.random() * 0.25 + 0.15;
+                opacity = Math.random() * 0.25 + 0.15;
                 break;
         }
         
@@ -232,34 +235,84 @@ function animate(timestamp) {
     animationId = requestAnimationFrame(animate);
 }
 
+// Hàm hiệu ứng gõ chữ
+function typeText(element, text, speed) {
+    return new Promise((resolve) => {
+        let index = 0;
+        element.textContent = '';
+        
+        function typeCharacter() {
+            if (index < text.length) {
+                element.textContent += text.charAt(index);
+                index++;
+                
+                // Thêm âm thanh gõ phím (tùy chọn)
+                if (index % 3 === 0) {
+                    playTypeSound();
+                }
+                
+                setTimeout(typeCharacter, speed);
+            } else {
+                resolve();
+            }
+        }
+        
+        typeCharacter();
+    });
+}
+
+// Hàm tạo âm thanh gõ phím nhẹ
+function playTypeSound() {
+    // Tạo âm thanh gõ phím đơn giản
+    const context = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = context.createOscillator();
+    const gainNode = context.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(context.destination);
+    
+    oscillator.frequency.value = 800 + Math.random() * 400;
+    oscillator.type = 'sine';
+    
+    gainNode.gain.setValueAtTime(0.05, context.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.1);
+    
+    oscillator.start(context.currentTime);
+    oscillator.stop(context.currentTime + 0.1);
+}
+
 // Hàm bắt đầu hiệu ứng lyric
-function startLyricEffect() {
+async function startLyricEffect() {
     // Reset tất cả lyric về trạng thái ẩn
     lyricLines.forEach(line => {
         line.classList.remove('active');
         line.style.opacity = '0';
         line.style.transform = 'translateY(30px)';
+        
+        // Reset text về ban đầu
+        const textElement = line.querySelector('.typed-text');
+        if (textElement) {
+            const originalText = getOriginalText(line.dataset.index);
+            textElement.textContent = '';
+            textElement.dataset.fullText = originalText;
+        }
     });
     
     currentLyricIndex = 0;
     
-    // Hiển thị lyric đầu tiên
+    // Hiển thị lyric đầu tiên với hiệu ứng gõ chữ
     if (lyricLines.length > 0) {
-        lyricLines[0].classList.add('active');
-        lyricLines[0].style.opacity = '1';
-        lyricLines[0].style.transform = 'translateY(0)';
+        await showLyricWithTyping(0);
     }
     
     // Xóa interval cũ nếu có
     if (lyricInterval) clearInterval(lyricInterval);
     
     // Tạo interval để hiển thị từng lyric
-    lyricInterval = setInterval(() => {
+    lyricInterval = setInterval(async () => {
         // Ẩn lyric hiện tại
         if (currentLyricIndex < lyricLines.length) {
-            lyricLines[currentLyricIndex].classList.remove('active');
-            lyricLines[currentLyricIndex].style.opacity = '0.3';
-            lyricLines[currentLyricIndex].style.transform = 'translateY(10px) scale(0.95)';
+            hideLyric(currentLyricIndex);
         }
         
         // Chuyển đến lyric tiếp theo
@@ -270,21 +323,64 @@ function startLyricEffect() {
             currentLyricIndex = 0;
         }
         
-        // Hiển thị lyric mới
-        lyricLines[currentLyricIndex].classList.add('active');
-        lyricLines[currentLyricIndex].style.opacity = '1';
-        lyricLines[currentLyricIndex].style.transform = 'translateY(0) scale(1)';
+        // Hiển thị lyric mới với hiệu ứng gõ chữ
+        await showLyricWithTyping(currentLyricIndex);
         
-        // Thêm hiệu ứng nhấp nháy nhẹ cho icon
-        const icons = lyricLines[currentLyricIndex].querySelectorAll('.lyric-icon');
-        icons.forEach(icon => {
-            icon.style.animation = 'none';
-            setTimeout(() => {
-                icon.style.animation = 'iconFloat 3s infinite ease-in-out';
-            }, 10);
-        });
-        
-    }, 3000); // Mỗi 3 giây chuyển lyric
+    }, 4000); // Mỗi 4 giây chuyển lyric
+}
+
+// Hàm lấy text gốc theo index
+function getOriginalText(index) {
+    const texts = [
+        "Merry Christmas",
+        "Chúc em một mùa Noel an lành",
+        "Ấm áp – Hạnh phúc – Bình yên",
+        "Yêu thương ngập tràn",
+        "Giáng Sinh vui vẻ"
+    ];
+    return texts[index] || "";
+}
+
+// Hàm hiển thị lyric với hiệu ứng gõ chữ
+async function showLyricWithTyping(index) {
+    const line = lyricLines[index];
+    const textElement = line.querySelector('.typed-text');
+    
+    // Hiển thị dòng lyric
+    line.classList.add('active');
+    line.style.opacity = '1';
+    line.style.transform = 'translateY(0)';
+    
+    // Lấy text gốc
+    const fullText = getOriginalText(index);
+    
+    // Thực hiện hiệu ứng gõ chữ
+    if (textElement && fullText) {
+        await typeText(textElement, fullText, typingSpeed);
+    }
+    
+    // Thêm hiệu ứng nhấp nháy nhẹ cho icon
+    const icons = line.querySelectorAll('.lyric-icon');
+    icons.forEach(icon => {
+        icon.style.animation = 'none';
+        setTimeout(() => {
+            icon.style.animation = 'activeIconFloat 2s infinite ease-in-out';
+        }, 10);
+    });
+}
+
+// Hàm ẩn lyric
+function hideLyric(index) {
+    const line = lyricLines[index];
+    line.classList.remove('active');
+    line.style.opacity = '0.3';
+    line.style.transform = 'translateY(10px) scale(0.95)';
+    
+    // Reset text để lần sau gõ lại
+    const textElement = line.querySelector('.typed-text');
+    if (textElement) {
+        textElement.textContent = '';
+    }
 }
 
 // Hàm phát nhạc
@@ -335,12 +431,27 @@ function showAudioInteractionMessage() {
         animation: fadeInOut 5s ease-in-out forwards;
     `;
     
+    // Thêm keyframe animation cho message
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = `
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+    `;
+    document.head.appendChild(styleSheet);
+    
     document.body.appendChild(message);
     
     // Xóa thông báo sau 5 giây
     setTimeout(() => {
         if (message.parentNode) {
             message.parentNode.removeChild(message);
+        }
+        if (styleSheet.parentNode) {
+            styleSheet.parentNode.removeChild(styleSheet);
         }
     }, 5000);
 }
