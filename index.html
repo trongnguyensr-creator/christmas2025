@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Phần 1: Mở đầu -->
@@ -16,7 +15,6 @@
         <canvas id="snow-intro"></canvas>
         <div class="intro-content">
             <h1 class="intro-title">Giáng Sinh Ấm Áp</h1>
-            <p class="intro-subtitle">Chào mừng bạn đến với mùa lễ hội yêu thương</p>
             <button id="open-gift-btn" class="gift-button">
                 <span class="button-icon">🎁</span>
                 <span class="button-text">MỞ QUÀ</span>
@@ -28,55 +26,34 @@
     <section id="main-section" class="section">
         <canvas id="snow-main"></canvas>
         
-        <!-- Ảnh trung tâm -->
-        <div class="center-image-container">
-            <img src="https://images.unsplash.com/photo-1512389142860-9c449e58a543?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
-                 alt="Cây thông Giáng Sinh" class="center-image" id="christmas-image">
-            <div class="image-overlay">
-                <div class="overlay-text">Merry Christmas</div>
+        <!-- Container cho lời chúc như lyric -->
+        <div class="lyrics-container">
+            <!-- Các dòng chữ sẽ xuất hiện tuần tự -->
+            <div class="lyric-line active" data-index="0">
+                <span class="lyric-icon">🎄</span>
+                <span class="lyric-text">Merry Christmas</span>
             </div>
-        </div>
-        
-        <!-- Các dòng chữ bay -->
-        <div class="floating-texts">
-            <div class="floating-text" style="--delay: 0s; --duration: 20s; --startX: 10%; --startY: 20%;">
-                <span class="text-icon">🎄</span> Merry Christmas
+            <div class="lyric-line" data-index="1">
+                <span class="lyric-text">Chúc em một mùa Noel an lành</span>
             </div>
-            <div class="floating-text" style="--delay: 2s; --duration: 22s; --startX: 80%; --startY: 15%;">
-                Chúc em một mùa Noel an lành
+            <div class="lyric-line" data-index="2">
+                <span class="lyric-text">Ấm áp – Hạnh phúc – Bình yên</span>
             </div>
-            <div class="floating-text" style="--delay: 4s; --duration: 24s; --startX: 15%; --startY: 80%;">
-                Ấm áp – Hạnh phúc – Bình yên
+            <div class="lyric-line" data-index="3">
+                <span class="lyric-text">Yêu thương ngập tràn</span>
             </div>
-            <div class="floating-text" style="--delay: 6s; --duration: 26s; --startX: 85%; --startY: 75%;">
-                Yêu thương ngập tràn
-            </div>
-            <div class="floating-text" style="--delay: 8s; --duration: 28s; --startX: 50%; --startY: 90%;">
-                <span class="text-icon">❄️</span> Giáng Sinh vui vẻ <span class="text-icon">❄️</span>
-            </div>
-        </div>
-        
-        <!-- Nút điều khiển -->
-        <div class="controls">
-            <button id="replay-btn" class="control-button">
-                <i class="fas fa-redo"></i>
-                <span>Xem lại</span>
-            </button>
-        </div>
-        
-        <!-- Thông tin footer -->
-        <div class="footer-info">
-            <p>Chúc bạn một mùa Giáng Sinh tràn đầy niềm vui và hạnh phúc!</p>
-            <div class="music-indicator">
-                <i class="fas fa-volume-up"></i>
-                <span>Nhạc đang phát...</span>
+            <div class="lyric-line" data-index="4">
+                <span class="lyric-icon">❄️</span>
+                <span class="lyric-text">Giáng Sinh vui vẻ</span>
+                <span class="lyric-icon">❄️</span>
             </div>
         </div>
     </section>
 
     <!-- Audio element -->
     <audio id="background-music" loop>
-        <source src="https://assets.mixkit.co/music/preview/mixkit-christmas-is-here-172.mp3" type="audio/mpeg">
+        <!-- Sử dụng file nhạc gsl.mp3 -->
+        <source src="gsl.mp3" type="audio/mpeg">
         Trình duyệt của bạn không hỗ trợ audio element.
     </audio>
 
