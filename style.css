@@ -70,7 +70,7 @@ canvas {
     font-family: 'Dancing Script', cursive;
     font-size: 5rem;
     font-weight: 700;
-    color: #FFFFFF; /* Màu trắng như yêu cầu */
+    color: #FFFFFF;
     margin-bottom: 3rem;
     text-shadow: 0 0 25px rgba(168, 218, 220, 0.7);
     animation: titleGlow 3s infinite alternate;
@@ -179,7 +179,7 @@ canvas {
 
 /* Dòng lyric - TẤT CẢ CÙNG MỘT FONT CHỮ */
 .lyric-line {
-    font-family: 'Pacifico', cursive; /* Font chữ thống nhất cho tất cả */
+    font-family: 'Pacifico', cursive;
     font-size: 3.2rem;
     color: #FFFFFF;
     text-align: center;
@@ -201,27 +201,34 @@ canvas {
 .lyric-line.active {
     opacity: 1;
     transform: translateY(0);
-    /* HIỆU ỨNG BÓNG ĐỔ CHO CÂU CHÚC ĐANG HOẠT ĐỘNG */
+    /* HIỆU ỨNG BÓNG ĐỔ XANH DƯƠNG - ĐEN CHO CÂU CHÚC ĐANG HOẠT ĐỘNG */
     box-shadow: 
-        0 0 30px rgba(230, 57, 70, 0.5),
-        0 15px 35px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(0, 150, 255, 0.7),  /* Xanh dương sáng */
+        0 0 50px rgba(0, 50, 100, 0.5),   /* Xanh dương đậm */
+        0 15px 35px rgba(0, 0, 0, 0.7),   /* Bóng đen */
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border-color: rgba(230, 57, 70, 0.4);
-    background: rgba(230, 57, 70, 0.15);
-    animation: activeGlow 2s infinite alternate;
+    border-color: rgba(0, 150, 255, 0.5);
+    background: linear-gradient(
+        135deg, 
+        rgba(0, 100, 200, 0.15), 
+        rgba(0, 50, 100, 0.25)
+    );
+    animation: activeGlowBlue 2s infinite alternate;
 }
 
-@keyframes activeGlow {
+@keyframes activeGlowBlue {
     0% {
         box-shadow: 
-            0 0 25px rgba(230, 57, 70, 0.5),
-            0 15px 35px rgba(0, 0, 0, 0.5),
+            0 0 25px rgba(0, 150, 255, 0.6),
+            0 0 40px rgba(0, 50, 100, 0.4),
+            0 15px 35px rgba(0, 0, 0, 0.6),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
     100% {
         box-shadow: 
-            0 0 40px rgba(230, 57, 70, 0.7),
-            0 20px 45px rgba(0, 0, 0, 0.6),
+            0 0 40px rgba(0, 180, 255, 0.9),
+            0 0 60px rgba(0, 80, 150, 0.6),
+            0 20px 45px rgba(0, 0, 0, 0.8),
             inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
 }
@@ -234,9 +241,10 @@ canvas {
     right: -2px;
     bottom: -2px;
     background: linear-gradient(45deg, 
-        rgba(230, 57, 70, 0.3), 
-        rgba(168, 218, 220, 0.3), 
-        rgba(230, 57, 70, 0.3));
+        rgba(0, 150, 255, 0.4),    /* Xanh dương sáng */
+        rgba(0, 50, 100, 0.6),     /* Xanh dương đậm */
+        rgba(0, 0, 0, 0.4),        /* Đen */
+        rgba(0, 150, 255, 0.4));   /* Xanh dương sáng */
     border-radius: 22px;
     z-index: -1;
     opacity: 0;
@@ -245,28 +253,69 @@ canvas {
 
 .lyric-line.active::before {
     opacity: 1;
-    animation: borderGlow 3s infinite linear;
+    animation: borderGlowBlue 3s infinite linear;
 }
 
-@keyframes borderGlow {
-    0% { opacity: 0.5; }
-    50% { opacity: 0.8; }
-    100% { opacity: 0.5; }
+@keyframes borderGlowBlue {
+    0% { 
+        background: linear-gradient(45deg, 
+            rgba(0, 150, 255, 0.4),
+            rgba(0, 50, 100, 0.6),
+            rgba(0, 0, 0, 0.4),
+            rgba(0, 150, 255, 0.4));
+    }
+    25% { 
+        background: linear-gradient(45deg, 
+            rgba(0, 50, 100, 0.6),
+            rgba(0, 0, 0, 0.4),
+            rgba(0, 150, 255, 0.4),
+            rgba(0, 50, 100, 0.6));
+    }
+    50% { 
+        background: linear-gradient(45deg, 
+            rgba(0, 0, 0, 0.4),
+            rgba(0, 150, 255, 0.4),
+            rgba(0, 50, 100, 0.6),
+            rgba(0, 0, 0, 0.4));
+    }
+    75% { 
+        background: linear-gradient(45deg, 
+            rgba(0, 150, 255, 0.4),
+            rgba(0, 50, 100, 0.6),
+            rgba(0, 0, 0, 0.4),
+            rgba(0, 150, 255, 0.4));
+    }
+    100% { 
+        background: linear-gradient(45deg, 
+            rgba(0, 150, 255, 0.4),
+            rgba(0, 50, 100, 0.6),
+            rgba(0, 0, 0, 0.4),
+            rgba(0, 150, 255, 0.4));
+    }
 }
 
 /* Hiệu ứng gõ chữ */
 .typed-text {
     display: inline-block;
     position: relative;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.lyric-line.active .typed-text {
+    text-shadow: 
+        0 0 10px rgba(0, 180, 255, 0.8),
+        0 0 20px rgba(0, 100, 200, 0.5),
+        0 2px 8px rgba(0, 0, 0, 0.7);
 }
 
 .typed-text::after {
     content: '|';
     position: absolute;
     right: -10px;
-    color: #e63946;
+    color: #0096ff; /* Màu xanh dương cho con trỏ */
     animation: blink 1s infinite;
     font-weight: bold;
+    text-shadow: 0 0 8px rgba(0, 150, 255, 0.8);
 }
 
 @keyframes blink {
@@ -289,8 +338,8 @@ canvas {
 }
 
 .lyric-line.active .lyric-icon {
-    animation: activeIconFloat 2s infinite ease-in-out;
-    filter: drop-shadow(0 0 10px rgba(230, 57, 70, 0.7));
+    animation: activeIconFloatBlue 2s infinite ease-in-out;
+    filter: drop-shadow(0 0 10px rgba(0, 150, 255, 0.8));
 }
 
 @keyframes iconFloat {
@@ -298,15 +347,40 @@ canvas {
     50% { transform: translateY(-8px) rotate(5deg); }
 }
 
-@keyframes activeIconFloat {
+@keyframes activeIconFloatBlue {
     0%, 100% { 
         transform: translateY(0) rotate(0deg) scale(1);
-        filter: drop-shadow(0 0 8px rgba(230, 57, 70, 0.7));
+        filter: drop-shadow(0 0 8px rgba(0, 150, 255, 0.7));
     }
     50% { 
         transform: translateY(-10px) rotate(10deg) scale(1.2);
-        filter: drop-shadow(0 0 15px rgba(230, 57, 70, 0.9));
+        filter: 
+            drop-shadow(0 0 15px rgba(0, 180, 255, 0.9))
+            drop-shadow(0 0 25px rgba(0, 100, 200, 0.6));
     }
+}
+
+/* Hiệu ứng phản chiếu cho text đang active */
+.lyric-line.active .lyric-text {
+    position: relative;
+}
+
+.lyric-line.active .lyric-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 150, 255, 0.2),
+        transparent
+    );
+    filter: blur(3px);
+    transform: scaleY(-1) translateY(-5px);
+    opacity: 0.6;
+    z-index: -1;
 }
 
 /* Responsive */
@@ -334,6 +408,14 @@ canvas {
     .lyric-icon {
         font-size: 2rem;
         margin: 0 10px;
+    }
+    
+    .lyric-line.active {
+        box-shadow: 
+            0 0 20px rgba(0, 150, 255, 0.6),
+            0 0 35px rgba(0, 50, 100, 0.4),
+            0 12px 25px rgba(0, 0, 0, 0.6),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 }
 
@@ -370,5 +452,13 @@ canvas {
     .typed-text::after {
         right: -8px;
         font-size: 0.9em;
+    }
+    
+    .lyric-line.active {
+        box-shadow: 
+            0 0 15px rgba(0, 150, 255, 0.5),
+            0 0 25px rgba(0, 50, 100, 0.3),
+            0 10px 20px rgba(0, 0, 0, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 }
