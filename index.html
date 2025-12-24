@@ -3,51 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giáng Sinh Ấm Áp</title>
+    <title>Giáng Sinh 2024 | Chúc Em Một Mùa Noel An Lành</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎄</text></svg>">
 </head>
 <body>
-    <div id="intro-screen" class="screen active">
-        <canvas id="snow-intro"></canvas>
+    <!-- Canvas cho hiệu ứng tuyết -->
+    <canvas id="snowCanvas"></canvas>
+    <canvas id="snow3dCanvas"></canvas>
+    
+    <!-- Màn hình intro -->
+    <div id="introScreen" class="screen active">
         <div class="intro-content">
-            <h1 class="christmas-title">🎄 Giáng Sinh An Lành 🎄</h1>
-            <p class="christmas-subtitle">Chúc bạn một mùa Noel ấm áp và hạnh phúc</p>
-            <button id="open-gift-btn" class="gift-button">
-                <i class="fas fa-gift"></i> MỞ QUÀ
-            </button>
+            <div class="snow-icon">❄️</div>
+            <h1 class="intro-title">EM MUỐN GỌI ANH LÀ GÌ?</h1>
+            <div class="button-container">
+                <button class="choice-btn wrong-btn" data-id="1">BFF</button>
+                <button class="choice-btn wrong-btn" data-id="2">Cốt</button>
+                <button class="choice-btn wrong-btn" data-id="3">Friend</button>
+                <button class="choice-btn wrong-btn" data-id="4">Ný</button>
+                <button class="choice-btn wrong-btn" data-id="5">Bro</button>
+                <button id="correctBtn" class="choice-btn correct-btn">ANH IU</button>
+            </div>
+            <p class="hint">(Hãy chọn đúng nhé!)</p>
         </div>
     </div>
-
-    <div id="main-screen" class="screen">
-        <canvas id="snow-main"></canvas>
-        
+    
+    <!-- Màn hình chính -->
+    <div id="mainScreen" class="screen">
+        <!-- Các dòng chữ bay xung quanh -->
         <div class="floating-text" id="text1">🎄 Merry Christmas</div>
-        <div class="floating-text" id="text2">Chúc bạn một mùa Noel an lành</div>
-        <div class="floating-text" id="text3">Ấm áp – Hạnh phúc – Bình yên</div>
-        <div class="floating-text" id="text4">May mắn và yêu thương</div>
+        <div class="floating-text" id="text2">Chúc em một mùa Noel an lành</div>
+        <div class="floating-text" id="text3">Ấm áp - Hạnh phúc - Bình yên</div>
+        <div class="floating-text" id="text4">Yêu thương ngập tràn</div>
         <div class="floating-text" id="text5">❄️ Giáng Sinh vui vẻ ❄️</div>
         
+        <!-- Ảnh bay xung quanh -->
+        <div class="floating-image-container">
+            <!-- Các ảnh sẽ được tạo động trong script.js -->
+        </div>
+        
+        <!-- Nội dung chính -->
         <div class="main-content">
-            <div class="christmas-card">
-                <h2><i class="fas fa-star"></i> Quà Giáng Sinh <i class="fas fa-star"></i></h2>
-                <p>Chúc bạn và gia đình một mùa Giáng Sinh tràn ngập niềm vui, sức khỏe và hạnh phúc!</p>
-                <div class="gift-box">
-                    <div class="ribbon"></div>
-                    <div class="box">
-                        <i class="fas fa-heart"></i>
-                    </div>
+            <h1 class="main-title">Giáng Sinh An Lành!</h1>
+            <div class="tree-container">
+                <div class="tree">
+                    <div class="tree-top"></div>
+                    <div class="tree-middle"></div>
+                    <div class="tree-bottom"></div>
+                    <div class="tree-trunk"></div>
+                    <div class="ornament ornament1"></div>
+                    <div class="ornament ornament2"></div>
+                    <div class="ornament ornament3"></div>
+                    <div class="ornament ornament4"></div>
+                    <div class="star"></div>
                 </div>
-                <button id="back-btn" class="back-button">
-                    <i class="fas fa-home"></i> Về trang chủ
+            </div>
+            <div class="message">
+                <p>Chúc em có một mùa Giáng Sinh thật ấm áp,<br>tràn ngập niềm vui và hạnh phúc!</p>
+                <p class="signature">- From Someone Special -</p>
+            </div>
+            
+            <!-- Control panel -->
+            <div class="controls">
+                <button id="musicToggle" class="control-btn">
+                    <i class="fas fa-music"></i> Nhạc nền
+                </button>
+                <button id="snowToggle" class="control-btn">
+                    <i class="fas fa-snowflake"></i> Tuyết rơi
+                </button>
+                <button id="restartBtn" class="control-btn">
+                    <i class="fas fa-redo"></i> Xem lại
                 </button>
             </div>
         </div>
     </div>
-
+    
+    <!-- Audio element -->
+    <audio id="bgMusic" loop preload="metadata">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-christmas-is-coming-1179.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <!-- Script -->
     <script src="script.js"></script>
 </body>
 </html>
