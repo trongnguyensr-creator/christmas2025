@@ -1,0 +1,231 @@
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a2332 0%, #0f1620 100%);
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Screen Container */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s ease, visibility 1s ease;
+}
+
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Canvas cho tuyết */
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* === INTRO SCREEN === */
+#intro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.intro-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+}
+
+/* Nút Mở Quà */
+.gift-button {
+    font-size: 2rem;
+    font-weight: bold;
+    padding: 25px 50px;
+    background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
+    color: white;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(196, 30, 58, 0.6);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gift-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 50px rgba(196, 30, 58, 0.9), 0 0 80px rgba(196, 30, 58, 0.6);
+}
+
+.gift-button:active {
+    transform: scale(1.05);
+}
+
+/* Hiệu ứng glow animation */
+.gift-button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    transform: rotate(45deg);
+    animation: shine 3s infinite;
+}
+
+@keyframes shine {
+    0% {
+        left: -200%;
+    }
+    50%, 100% {
+        left: 200%;
+    }
+}
+
+/* === MAIN SCENE === */
+#mainScene {
+    background: linear-gradient(135deg, #1a2a3a 0%, #0d1620 100%);
+}
+
+/* Các dòng chữ bay */
+.floating-text-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.floating-text {
+    position: absolute;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5),
+                 0 0 20px rgba(100, 200, 255, 0.3);
+    white-space: nowrap;
+    opacity: 0;
+    animation: floatText 20s infinite ease-in-out;
+}
+
+/* Vị trí và timing khác nhau cho mỗi dòng chữ */
+.text-1 {
+    top: 15%;
+    left: 10%;
+    font-size: 2rem;
+    color: #ff6b6b;
+    animation-delay: 0s;
+    animation-duration: 18s;
+}
+
+.text-2 {
+    top: 70%;
+    right: 10%;
+    font-size: 1.3rem;
+    color: #e8f5e9;
+    animation-delay: 3s;
+    animation-duration: 22s;
+}
+
+.text-3 {
+    top: 40%;
+    left: 5%;
+    font-size: 1.4rem;
+    color: #81c784;
+    animation-delay: 6s;
+    animation-duration: 20s;
+}
+
+.text-4 {
+    top: 25%;
+    right: 15%;
+    font-size: 1.3rem;
+    color: #fff9c4;
+    animation-delay: 9s;
+    animation-duration: 19s;
+}
+
+.text-5 {
+    top: 60%;
+    left: 15%;
+    font-size: 1.6rem;
+    color: #b3e5fc;
+    animation-delay: 12s;
+    animation-duration: 21s;
+}
+
+/* Animation cho chữ bay */
+@keyframes floatText {
+    0% {
+        opacity: 0;
+        transform: translateY(0) translateX(0) scale(1);
+    }
+    10% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-30px) translateX(20px) scale(1.05);
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-60px) translateX(-20px) scale(0.95);
+    }
+}
+
+/* Responsive cho màn hình nhỏ */
+@media (max-width: 768px) {
+    .gift-button {
+        font-size: 1.5rem;
+        padding: 20px 40px;
+    }
+    
+    .floating-text {
+        font-size: 1.1rem !important;
+    }
+    
+    .text-1 {
+        font-size: 1.5rem !important;
+        top: 10%;
+        left: 5%;
+    }
+    
+    .text-2, .text-3, .text-4, .text-5 {
+        font-size: 1rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .gift-button {
+        font-size: 1.2rem;
+        padding: 15px 30px;
+    }
+}
